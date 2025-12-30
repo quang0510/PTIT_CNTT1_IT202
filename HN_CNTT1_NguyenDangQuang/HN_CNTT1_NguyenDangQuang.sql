@@ -27,6 +27,7 @@ create table Borrow (
 
 alter table Reader add email varchar(100) unique;
 alter table Book modify author varchar(150);
+alter table Borrow add constraint return_date check (return_date >= borrow_date);
 
 insert into Reader (reader_name , phone , email , register_date) values
 ('Nguyễn Văn An' , '0901234567', 'an.nguyen@gmail.com' , '2024-09-01'  ),
