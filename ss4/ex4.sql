@@ -27,7 +27,7 @@ create table enrollment(
 	student_id int not null,
     course_id int not null,
     enroll_date date default (current_date()),
-    unique(student_id, course_id),
+    primary key(student_id, course_id),
     foreign key (student_id) references student(student_id),
     foreign key (course_id) references course(course_id)
 );
@@ -37,7 +37,7 @@ create table score(
     course_id int not null,
     mid_score decimal(4,2) check (mid_score >= 0 and mid_score <= 10),
     final_score decimal(4, 2) check (final_score >= 0 and final_score <= 10),
-    unique(student_id, course_id),
+    primary key(student_id, course_id),
     foreign key (student_id) references student(student_id),
     foreign key (course_id) references course(course_id)
 );
