@@ -147,7 +147,38 @@ call GetTopScoreStudent('C00002');
 	-- Hiển thị các sinh viên: Thuộc khoa IT , Đăng ký môn C00001
 	-- View phải có WITH CHECK OPTION.
 
-create or replace view 
+create or replace view View_IT_Enrollment_DB 
+as
+select * from Student 
+where DeptID = 'IT' and StudentID in (select StudentID from Enrollment where CourseID = 'C00001' )
+with check option;
+
+-- b) Viết Stored Procedure UpdateScore_IT_DB
+	-- Tham số: IN p_StudentID , INOUT p_NewScore
+    -- Xử lý: Nếu p_NewScore > 10 → gán lại = 10 , Cập nhật điểm thông qua View View_IT_Enrollment_DB.
+
+delimiter //
+
+create procedure UpdateScore_IT_DB( in p_StudentID char(6), inout p_NewScore float)
+begin
+
+    -- Nếu điểm > 10 thì gán lại = 10
+    if p_NewScore > 10 then
+        set p_NewScore = 10;
+    end if;
+
+    -- Cập nhật điểm thông qua View (đảm bảo chỉ sinh viên IT + môn C00001)
+    update Enrollment
+    set Score = p_NewScore
+    where StudentID in ( select StudentID
+						from View_IT_Enrollment_DB
+						where StudentID = p_StudentID ) and CourseID = 'C00001';
+                        
+end //
+
+delimiter ;
+
+
 
 
 
